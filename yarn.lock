@@ -2191,6 +2191,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantinex/mantine-logo@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@mantinex/mantine-logo@npm:1.0.1"
+  peerDependencies:
+    "@mantine/core": ">=7.0.0"
+    "@mantine/hooks": ">=7.0.0"
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: d1628195eaf6681c4366c0154ee2e3adf1b863432ab15e6285a3f33ffbb33a17ec0b5a90a9ced2429cbf2841d4de11f72320ca3d37578d6908a5b9f194fea2d3
+  languageName: node
+  linkType: hard
+
 "@mdx-js/react@npm:^2.1.5":
   version: 2.3.0
   resolution: "@mdx-js/react@npm:2.3.0"
@@ -3886,6 +3898,25 @@ __metadata:
     "@types/express": "npm:^4.7.0"
     file-system-cache: "npm:2.3.0"
   checksum: 4219a92a6e7762ac5a1dae101aa1072f4c37607f6f2173ae70d224ddc294d9f70e55462eb42028a87e676840f2e87f1bc0e82b28bbb35207278405868b467eb7
+  languageName: node
+  linkType: hard
+
+"@tabler/icons-react@npm:^2.42.0":
+  version: 2.42.0
+  resolution: "@tabler/icons-react@npm:2.42.0"
+  dependencies:
+    "@tabler/icons": "npm:2.42.0"
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0
+  checksum: e9255de7152c4f9bac740008da6e9e7238523f85c8d3f57fea042b44087644a95ea8501ca49f798a075d901da2d3f719ee3483ae870783fb15a108b4042198b8
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:2.42.0":
+  version: 2.42.0
+  resolution: "@tabler/icons@npm:2.42.0"
+  checksum: d97c06159109fbec75be39e1a4600cc8755f126682cbeab184eab612ead785dda05fcdbba244272aa834488bd14ce631aa37fd58be1237897b2757d6de0903ce
   languageName: node
   linkType: hard
 
@@ -8998,6 +9029,7 @@ __metadata:
   dependencies:
     "@mantine/core": "npm:7.2.2"
     "@mantine/hooks": "npm:7.2.2"
+    "@mantinex/mantine-logo": "npm:^1.0.1"
     "@storybook/addon-essentials": "npm:^7.5.2"
     "@storybook/addon-interactions": "npm:^7.5.2"
     "@storybook/addon-links": "npm:^7.5.2"
@@ -9005,6 +9037,7 @@ __metadata:
     "@storybook/react": "npm:^7.5.2"
     "@storybook/react-vite": "npm:^7.5.2"
     "@storybook/testing-library": "npm:^0.2.2"
+    "@tabler/icons-react": "npm:^2.42.0"
     "@testing-library/dom": "npm:^9.3.3"
     "@testing-library/jest-dom": "npm:^6.1.4"
     "@testing-library/react": "npm:^14.0.0"

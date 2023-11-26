@@ -1,0 +1,13 @@
+.wrapper {
+    max-width: 960px;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    margin: 50px auto;
+}
+
+.container_cards {
+    display: grid;
+    gap: 15px;
+}

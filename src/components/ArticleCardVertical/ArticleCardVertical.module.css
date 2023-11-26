@@ -1,0 +1,22 @@
+.card {
+    background-color: var(--mantine-color-body);
+    cursor: pointer;
+    transition: ease-in-out;
+    transition-duration: 0.2s;
+}
+
+.card:hover {
+    transform: scale(102%);
+    transition: ease-in-out;
+    transition-duration: 0.2s;
+}
+
+.title {
+    font-weight: bold;
+    font-family: Greycliff CF, var(--mantine-font-family);
+    line-height: 1.2;
+}
+
+.body {
+    padding: var(--mantine-spacing-md);
+}
