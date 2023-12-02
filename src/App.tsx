@@ -3,13 +3,15 @@ import { MantineProvider } from '@mantine/core';
 import { Router } from './Router';
 import { theme } from './theme';
 import { FooterLinks } from './components/Footer/FooterLinks';
-import { HeroContentLeft } from './components/NavBar/HeroContentLeft';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <HeroContentLeft />
-      <Router />
+      <Provider store={store}>
+        <Router />
+      </Provider>
       <FooterLinks />
     </MantineProvider>
   );

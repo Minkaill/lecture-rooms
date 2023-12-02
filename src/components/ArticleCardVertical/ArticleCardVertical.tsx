@@ -1,13 +1,16 @@
 import { Card, Image, Avatar, Text, Group } from '@mantine/core';
 import classes from './ArticleCardVertical.module.css';
+import { useNavigate } from 'react-router-dom';
 
 interface ArticleCardVerticalProps {
-    name: string
+    name: string,
+    id: string
 }
 
-export function ArticleCardVertical({ name }: ArticleCardVerticalProps) {
+export function ArticleCardVertical({ name, id }: ArticleCardVerticalProps) {
+    const navigate = useNavigate()
     return (
-        <Card withBorder radius="md" p={0} className={classes.card}>
+        <Card onClick={() => navigate(`/category/${id}`)} withBorder radius="md" p={0} className={classes.card}>
             <Group wrap="nowrap" gap={0}>
                 <div className={classes.body}>
                     <Text tt="uppercase" c="dimmed" fw={700} size="xs">

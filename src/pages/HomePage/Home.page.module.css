@@ -11,3 +11,10 @@
     display: grid;
     gap: 15px;
 }
+
+.loader {
+    display: flex;
+    height: 40vh;
+    justify-content: center;
+    align-items: center;
+}
