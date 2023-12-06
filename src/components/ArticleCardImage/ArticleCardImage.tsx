@@ -3,11 +3,11 @@ import { Card, Text, Group, Center, rem, useMantineTheme } from '@mantine/core';
 import classes from './ArticleCardImage.module.css';
 
 interface ArticleCardImageProps {
-    url_image: string
+    url_image: string,
+    name: string
 }
 
-export function ArticleCardImage({ url_image }: ArticleCardImageProps) {
-    console.log(url_image)
+export function ArticleCardImage({ url_image, name }: ArticleCardImageProps) {
     const theme = useMantineTheme();
     return (
         <Card
@@ -28,7 +28,7 @@ export function ArticleCardImage({ url_image }: ArticleCardImageProps) {
             <div className={classes.content}>
                 <div>
                     <Text size="lg" className={classes.title} fw={500}>
-                        Journey to Swiss Alps
+                        {name}
                     </Text>
 
                     <Group justify="space-between" gap="xs">

@@ -19,12 +19,16 @@
     "storybook:build": "storybook build"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.13.0",
     "@mantine/core": "7.2.2",
     "@mantine/hooks": "7.2.2",
     "@mantinex/mantine-logo": "^1.0.1",
     "@reduxjs/toolkit": "^1.9.7",
     "@tabler/icons-react": "^2.42.0",
     "axios": "^1.6.2",
+    "buffer": "^6.0.3",
+    "cloudinary-react": "^1.8.1",
     "loaders.css": "^0.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

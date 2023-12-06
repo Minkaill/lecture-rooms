@@ -5,12 +5,13 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Title, Text, Button, Container } from '@mantine/core';
 import { Dots } from './Dots';
-import classes from './Category.module.css';
-import Loader from "react-loaders"
-import axios from "axios"
 import { getLectures } from "@/store/features/lecture"
 import { selectLectures } from "@/store/slices/lectures"
 import { ArticleCardImage } from "@/components/ArticleCardImage/ArticleCardImage"
+import { Buffer } from "buffer"
+import classes from './Category.module.css';
+import Loader from "react-loaders"
+import axios from "axios"
 
 export function Category() {
     const { selectedCategory, isLoading } = useAppSelector(selectCategories)
@@ -21,27 +22,49 @@ export function Category() {
     const { id } = useParams()
 
     const [image, setImage] = useState<File | string>("");
-    const [fileBase64, setFileBase64] = useState<string>("")
-    console.log(fileBase64)
+    const [images, setImages] = useState<any>([])
+    const [url, setUrl] = useState<any>("")
 
     const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = URL.createObjectURL((event.target.files as FileList)[0])
-        setImage(selectedFile);
-        convertFile(event.target.files)
+        if (!event.target.files) return;
+        setImage(event.target.files[0]);
     };
+
+    const cloudName = "dmdnmlfs5";
+    const apiKey = "737714675811424";
+    const apiSecret = "7MT5DIwdla1eSt8EOX7PhoRN_Fw";
+
+    const imageUrl = "https://res.cloudinary.com/dmdnmlfs5/image/upload/"
+
+    async function getFolders() {
+        const response = await fetch(`https://res.cloudinary.com/${cloudName}/image/list/lectures.json`
+            ,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Basic ${Buffer.from(apiKey + ':' + apiSecret).toString('base64')}`
+                }
+            }
+        ).then(r => r.json()).then((data) => setImages(data)).catch((e: any) => console.warn(e))
+        return response;
+    }
+
+    useEffect(() => {
+        getFolders()
+    }, [])
+
+    console.log(images.resources)
 
     const handleImageApi = () => {
         try {
             if (image) {
                 const formData = new FormData()
-                formData.append("url_image", fileBase64)
-                axios.post(`https://653fb19b9e8bd3be29e10e51.mockapi.io/categories/${id}/lectures`, formData, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).catch((error) => {
-                    alert(`Ошибка: Слишком большой размер файла`)
-                })
+                formData.append("file", image)
+                formData.append("upload_preset", "lectures")
+                formData.append("cloud_name", "dmdnmlfs5")
+                formData.append("tags", "lectures")
+                axios.post(`https://api.cloudinary.com/v1_1/dmdnmlfs5/image/upload`, formData)
+                    .then(({ data }: any) => setUrl(data)).catch((error) => alert(`Ошибка: ${error}`))
             } else {
                 alert("Выберите файл перед отправкой")
             }
@@ -55,19 +78,6 @@ export function Category() {
             fileRef.current.click();
         }
     };
-
-    const convertFile = (files: FileList | null) => {
-        if (files) {
-            const fileR = files[0] || ""
-            const fileType: string = fileR.type || ""
-            console.log("This file upload is of type:", fileType)
-            const reader = new FileReader()
-            reader.readAsBinaryString(fileR)
-            reader.onload = (ev: any) => {
-                setFileBase64(`data:${fileType};base64,${btoa(ev.target.result)}`)
-            }
-        }
-    }
 
     useEffect(() => {
         dispatch(getCategoryById(String(id)))
@@ -83,8 +93,11 @@ export function Category() {
         </div>
     </div>
 
+    // const test = `${imageUrl}${images.resources[0].public_id}.${images.resources[0].format}`
+
     return (
         <Container className={classes.wrapper} size={1400}>
+            {/* <img src={`${url}${images.resources[0]}`} alt="" /> */}
             <Dots className={classes.dots} style={{ left: 0, top: 0 }} />
             <Dots className={classes.dots} style={{ left: 60, top: 0 }} />
             <Dots className={classes.dots} style={{ left: 0, top: 140 }} />
@@ -116,7 +129,7 @@ export function Category() {
             </div>
 
             <div className={classes.card_conteiner}>
-                {lectures?.map((lecture) => <ArticleCardImage key={lecture.id} url_image={lecture.url_image} />)}
+                {lectures?.map((lecture) => <ArticleCardImage key={lecture.id} url_image={lecture.url_image} name={lecture.name} />)}
             </div>
         </Container>
     );
