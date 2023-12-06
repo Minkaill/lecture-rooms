@@ -1,8 +1,7 @@
 export interface LectureDTO {
     id: string,
-    name: string,
     categoryId: string,
-    url_image: string
+    url: string
 }
 
 export interface ILecture {

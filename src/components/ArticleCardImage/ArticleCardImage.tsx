@@ -3,12 +3,12 @@ import { Card, Text, Group, Center, rem, useMantineTheme } from '@mantine/core';
 import classes from './ArticleCardImage.module.css';
 
 interface ArticleCardImageProps {
-    url_image: string,
-    name: string
+    url: string,
 }
 
-export function ArticleCardImage({ url_image, name }: ArticleCardImageProps) {
+export function ArticleCardImage({ url }: ArticleCardImageProps) {
     const theme = useMantineTheme();
+
     return (
         <Card
             p="lg"
@@ -20,7 +20,7 @@ export function ArticleCardImage({ url_image, name }: ArticleCardImageProps) {
             <div
                 className={classes.image}
                 style={{
-                    backgroundImage: `url(${url_image})`,
+                    backgroundImage: `url(${url})`,
                 }}
             />
             <div className={classes.overlay} />
@@ -28,7 +28,7 @@ export function ArticleCardImage({ url_image, name }: ArticleCardImageProps) {
             <div className={classes.content}>
                 <div>
                     <Text size="lg" className={classes.title} fw={500}>
-                        {name}
+                        Name random
                     </Text>
 
                     <Group justify="space-between" gap="xs">

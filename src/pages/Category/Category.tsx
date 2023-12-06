@@ -2,74 +2,44 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux"
 import { getCategoryById } from "@/store/features/categories"
 import { selectCategories } from "@/store/slices/categories"
 import { useEffect, useRef, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Title, Text, Button, Container } from '@mantine/core';
 import { Dots } from './Dots';
-import { getLectures } from "@/store/features/lecture"
+import { addLectures, getLectures, onPostMockUrl } from "@/store/features/lecture"
 import { selectLectures } from "@/store/slices/lectures"
 import { ArticleCardImage } from "@/components/ArticleCardImage/ArticleCardImage"
-import { Buffer } from "buffer"
 import classes from './Category.module.css';
 import Loader from "react-loaders"
-import axios from "axios"
 
 export function Category() {
     const { selectedCategory, isLoading } = useAppSelector(selectCategories)
     const { lectures } = useAppSelector(selectLectures)
-    const dispatch = useAppDispatch()
     const fileRef = useRef<HTMLInputElement>(null)
-    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const { id } = useParams()
 
     const [image, setImage] = useState<File | string>("");
-    const [images, setImages] = useState<any>([])
-    const [url, setUrl] = useState<any>("")
 
     const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files) return;
         setImage(event.target.files[0]);
     };
 
-    const cloudName = "dmdnmlfs5";
-    const apiKey = "737714675811424";
-    const apiSecret = "7MT5DIwdla1eSt8EOX7PhoRN_Fw";
-
-    const imageUrl = "https://res.cloudinary.com/dmdnmlfs5/image/upload/"
-
-    async function getFolders() {
-        const response = await fetch(`https://res.cloudinary.com/${cloudName}/image/list/lectures.json`
-            ,
-            {
-                method: "GET",
-                headers: {
-                    Authorization: `Basic ${Buffer.from(apiKey + ':' + apiSecret).toString('base64')}`
+    const onAddLecture = () => {
+        if (image) {
+            const fd = new FormData()
+            fd.append("file", image)
+            fd.append("upload_preset", "lectures")
+            fd.append("cloud_name", "dmdnmlfs5")
+            fd.append("tags", "lectures")
+            dispatch(addLectures(fd)).then((data) => {
+                if (addLectures.fulfilled.match(data)) {
+                    const url = data.payload.data.url
+                    return dispatch(onPostMockUrl({ id, url }))
+                } else {
+                    console.error('Thunk-действие addLectures завершилось с ошибкой:', data.error);
                 }
-            }
-        ).then(r => r.json()).then((data) => setImages(data)).catch((e: any) => console.warn(e))
-        return response;
-    }
-
-    useEffect(() => {
-        getFolders()
-    }, [])
-
-    console.log(images.resources)
-
-    const handleImageApi = () => {
-        try {
-            if (image) {
-                const formData = new FormData()
-                formData.append("file", image)
-                formData.append("upload_preset", "lectures")
-                formData.append("cloud_name", "dmdnmlfs5")
-                formData.append("tags", "lectures")
-                axios.post(`https://api.cloudinary.com/v1_1/dmdnmlfs5/image/upload`, formData)
-                    .then(({ data }: any) => setUrl(data)).catch((error) => alert(`Ошибка: ${error}`))
-            } else {
-                alert("Выберите файл перед отправкой")
-            }
-        } catch (error) {
-            alert("Что-то пошло не так")
+            })
         }
     }
 
@@ -93,11 +63,8 @@ export function Category() {
         </div>
     </div>
 
-    // const test = `${imageUrl}${images.resources[0].public_id}.${images.resources[0].format}`
-
     return (
         <Container className={classes.wrapper} size={1400}>
-            {/* <img src={`${url}${images.resources[0]}`} alt="" /> */}
             <Dots className={classes.dots} style={{ left: 0, top: 0 }} />
             <Dots className={classes.dots} style={{ left: 60, top: 0 }} />
             <Dots className={classes.dots} style={{ left: 0, top: 140 }} />
@@ -122,14 +89,14 @@ export function Category() {
                     <Button onClick={handleUploadButtonClick} className={classes.control} size="lg" variant="default" color="gray">
                         Загрузить лекцию
                     </Button>
-                    <Button disabled={image ? false : true} onClick={handleImageApi} className={classes.control} size="lg">
+                    <Button disabled={image ? false : true} onClick={onAddLecture} className={classes.control} size="lg">
                         Отправить
                     </Button>
                 </div>
             </div>
 
             <div className={classes.card_conteiner}>
-                {lectures?.map((lecture) => <ArticleCardImage key={lecture.id} url_image={lecture.url_image} name={lecture.name} />)}
+                {lectures?.map((lecture) => <ArticleCardImage key={lecture.id} url={lecture.url} />)}
             </div>
         </Container>
     );
