@@ -1,13 +1,12 @@
-import { IconEye, IconMessageCircle } from '@tabler/icons-react';
-import { Card, Text, Group, Center, rem, useMantineTheme } from '@mantine/core';
+import { Card } from '@mantine/core';
 import classes from './ArticleCardImage.module.css';
+import { DonwloadIcon, WatchIcon } from '../../assets/icons/icons.jsx';
 
 interface ArticleCardImageProps {
     url: string,
 }
 
 export function ArticleCardImage({ url }: ArticleCardImageProps) {
-    const theme = useMantineTheme();
 
     return (
         <Card
@@ -15,6 +14,8 @@ export function ArticleCardImage({ url }: ArticleCardImageProps) {
             shadow="lg"
             className={classes.card}
             radius="md"
+            // href={url}
+            // target='blank'
             component="a"
         >
             <div
@@ -23,42 +24,10 @@ export function ArticleCardImage({ url }: ArticleCardImageProps) {
                     backgroundImage: `url(${url})`,
                 }}
             />
-            <div className={classes.overlay} />
-
-            <div className={classes.content}>
-                <div>
-                    <Text size="lg" className={classes.title} fw={500}>
-                        Name random
-                    </Text>
-
-                    <Group justify="space-between" gap="xs">
-                        <Text size="sm" className={classes.author}>
-                            Robert Gluesticker
-                        </Text>
-
-                        <Group gap="lg">
-                            <Center>
-                                <IconEye
-                                    style={{ width: rem(16), height: rem(16) }}
-                                    stroke={1.5}
-                                    color={theme.colors.dark[2]}
-                                />
-                                <Text size="sm" className={classes.bodyText}>
-                                    7847
-                                </Text>
-                            </Center>
-                            <Center>
-                                <IconMessageCircle
-                                    style={{ width: rem(16), height: rem(16) }}
-                                    stroke={1.5}
-                                    color={theme.colors.dark[2]}
-                                />
-                                <Text size="sm" className={classes.bodyText}>
-                                    5
-                                </Text>
-                            </Center>
-                        </Group>
-                    </Group>
+            <div className={classes.overlay}>
+                <div className={classes.icons}>
+                    <DonwloadIcon url={url} />
+                    <WatchIcon url={url} />
                 </div>
             </div>
         </Card>

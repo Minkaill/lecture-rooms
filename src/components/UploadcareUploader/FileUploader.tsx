@@ -65,7 +65,7 @@ export default function FileUploader({ files, uploaderClassName, onChange, theme
         <div className={st.root}>
             <lr-config
                 ctx-name="my-uploader"
-                pubkey="2b7f257e8ea0817ba746"
+                pubkey={import.meta.env.VITE_UPLOAD_KEY}
                 multiple={false}
                 sourceList="local, url, camera"
                 confirmUpload={false}

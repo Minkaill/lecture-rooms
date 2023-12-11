@@ -1,5 +1,7 @@
 .card {
     position: relative;
+    cursor: pointer;
+    width: 250px;
     height: rem(280px);
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
 
@@ -10,8 +12,10 @@
     }
 }
 
+
 .image {
     position: absolute;
+    background-position: center;
     inset: 0;
     background-size: cover;
     transition: transform 500ms ease;
@@ -21,9 +25,38 @@
     position: absolute;
     top: 20%;
     left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     right: 0;
     bottom: 0;
+    transition: opacity 0.3s ease;
+    opacity: 0;
     background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 90%);
+}
+
+.card:hover .overlay {
+    opacity: 1;
+}
+
+.card:hover .icons {
+    opacity: 1;
+    bottom: 20px;
+    transition-duration: 0.5s;
+    transform: scale(1.1);
+}
+
+.icons {
+    width: 100px;
+    position: relative;
+    bottom: -50px;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    align-items: center;
+    transform: scale(1);
+    transition-duration: 0.5s;
 }
 
 .content {
@@ -47,4 +80,10 @@
 
 .author {
     color: var(--mantine-color-dark-2);
+}
+
+@media (max-width: 576px) {
+    .card {
+        width: 100%;
+    }
 }

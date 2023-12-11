@@ -97,7 +97,6 @@ export function Category() {
 
                 <div className={classes.controls}>
                     <Button className={classes.control} size="lg" variant="default" color="gray">
-                        Загрузить лекцию
                         <FileUploader files={image} uploaderClassName={st.FileUploader} onChange={setImage} theme="dark" />
                     </Button>
                     <Button disabled={image ? false : true} onClick={onAddLecture} className={classes.control} size="lg">
