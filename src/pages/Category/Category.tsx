@@ -5,37 +5,51 @@ import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Title, Text, Button, Container } from '@mantine/core';
 import { Dots } from './Dots';
+import st from '../../components/UploadcareUploader/FileUploader.module.scss';
+import { OutputFileEntry } from '@uploadcare/blocks';
 import { addLectures, getLectures, onPostMockUrl } from "@/store/features/lecture"
 import { selectLectures } from "@/store/slices/lectures"
 import { ArticleCardImage } from "@/components/ArticleCardImage/ArticleCardImage"
 import classes from './Category.module.css';
 import Loader from "react-loaders"
+import FileUploader from "@/components/UploadcareUploader/FileUploader"
+import { LectureDTO } from "@/models/lectures"
+import { UploadFileProgress } from "@/hooks/useUploadProgress"
 
 export function Category() {
-    const { selectedCategory, isLoading } = useAppSelector(selectCategories)
-    const { lectures } = useAppSelector(selectLectures)
-    const fileRef = useRef<HTMLInputElement>(null)
     const dispatch = useAppDispatch()
+
+    const { selectedCategory, isLoading } = useAppSelector(selectCategories)
+    const { lectures, progressData } = useAppSelector(selectLectures)
     const { id } = useParams()
 
-    const [image, setImage] = useState<File | string>("");
+    const [data, setData] = useState<LectureDTO[]>([])
 
-    const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (!event.target.files) return;
-        setImage(event.target.files[0]);
-    };
+    console.log(progressData, "PROGRESS DATA")
+
+    useEffect(() => {
+        setData(lectures)
+    }, [lectures, dispatch])
+
+    console.log(data, "DATA")
+
+    const [image, setImage] = useState<OutputFileEntry[]>([]);
 
     const onAddLecture = () => {
-        if (image) {
+        if (image && image.length > 0) {
             const fd = new FormData()
-            fd.append("file", image)
+            image.forEach((img) => {
+                if (img && img.file) { // Check if img and img.file are not null
+                    fd.append('file', img.file);
+                }
+            });
             fd.append("upload_preset", "lectures")
             fd.append("cloud_name", "dmdnmlfs5")
             fd.append("tags", "lectures")
             dispatch(addLectures(fd)).then((data) => {
                 if (addLectures.fulfilled.match(data)) {
                     const url = data.payload.data.url
-                    return dispatch(onPostMockUrl({ id, url }))
+                    return dispatch(onPostMockUrl({ id, url })).then((dt: any) => setData((prev: any) => [...prev, dt.payload.data]))
                 } else {
                     console.error('Thunk-действие addLectures завершилось с ошибкой:', data.error);
                 }
@@ -43,11 +57,7 @@ export function Category() {
         }
     }
 
-    const handleUploadButtonClick = () => {
-        if (fileRef.current) {
-            fileRef.current.click();
-        }
-    };
+
 
     useEffect(() => {
         dispatch(getCategoryById(String(id)))
@@ -65,6 +75,7 @@ export function Category() {
 
     return (
         <Container className={classes.wrapper} size={1400}>
+
             <Dots className={classes.dots} style={{ left: 0, top: 0 }} />
             <Dots className={classes.dots} style={{ left: 60, top: 0 }} />
             <Dots className={classes.dots} style={{ left: 0, top: 140 }} />
@@ -85,9 +96,9 @@ export function Category() {
                 </Container>
 
                 <div className={classes.controls}>
-                    <input ref={fileRef} type="file" hidden onChange={handleImage} />
-                    <Button onClick={handleUploadButtonClick} className={classes.control} size="lg" variant="default" color="gray">
+                    <Button className={classes.control} size="lg" variant="default" color="gray">
                         Загрузить лекцию
+                        <FileUploader files={image} uploaderClassName={st.FileUploader} onChange={setImage} theme="dark" />
                     </Button>
                     <Button disabled={image ? false : true} onClick={onAddLecture} className={classes.control} size="lg">
                         Отправить
@@ -95,8 +106,9 @@ export function Category() {
                 </div>
             </div>
 
+
             <div className={classes.card_conteiner}>
-                {lectures?.map((lecture) => <ArticleCardImage key={lecture.id} url={lecture.url} />)}
+                {data?.map((lecture) => <ArticleCardImage key={lecture.id} url={lecture.url} />)}
             </div>
         </Container>
     );

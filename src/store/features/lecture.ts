@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios"
+import { setProgressData } from "../slices/lectures";
 
 export const getLectures = createAsyncThunk("get/lectures", async (id: string, thunkApi) => {
     try {
@@ -12,7 +13,11 @@ export const getLectures = createAsyncThunk("get/lectures", async (id: string, t
 
 export const addLectures = createAsyncThunk("post/lectures", async (fd: any, thunkApi) => {
     try {
-        const response = await axios.post(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDNAME}/image/upload`, fd)
+        const response = await axios.post(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDNAME}/image/upload`, fd, {
+            onUploadProgress: event => {
+                thunkApi.dispatch(setProgressData(event));
+            }
+        })
         return response
     } catch (error) {
         return thunkApi.rejectWithValue(error)

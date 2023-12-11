@@ -7,3 +7,26 @@
 .loader-active {
     display: block;
 }
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    position: relative;
+    min-height: 100%;
+}
+
+.app-wrapper {
+    padding-bottom: 50px;
+    /* Высота вашего футера */
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

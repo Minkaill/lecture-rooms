@@ -10,9 +10,13 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <Provider store={store}>
-        <Router />
+        <div className="app-wrapper">
+          <Router />
+        </div>
       </Provider>
+      <div className='footer'>
       <FooterLinks />
+      </div>
     </MantineProvider>
   );
 }

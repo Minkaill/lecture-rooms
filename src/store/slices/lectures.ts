@@ -7,18 +7,32 @@ interface LectureState {
     lectures: LectureDTO[],
     isLoading: boolean,
     error: null | string
+    progressData: null | {
+        loaded: number;
+        total: number;
+        percentCompleted: number;
+    };
 }
 
 const initialState: LectureState = {
     lectures: [],
     isLoading: false,
-    error: null
+    error: null,
+    progressData: null
 }
 
 export const lectureSlice = createSlice({
     name: "lecture",
     initialState,
-    reducers: {},
+    reducers: {
+        setProgressData: (state, action) => {
+            state.progressData = {
+                loaded: action.payload.loaded,
+                total: action.payload.total,
+                percentCompleted: (action.payload.loaded / action.payload.total) * 100,
+            };
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getLectures.pending, (state) => {
@@ -54,6 +68,8 @@ export const lectureSlice = createSlice({
             })
     }
 })
+
+export const { setProgressData } = lectureSlice.actions
 
 export default lectureSlice.reducer
 export const selectLectures = (state: RootState) => state.lectures
