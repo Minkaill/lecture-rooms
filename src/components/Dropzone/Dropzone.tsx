@@ -10,7 +10,6 @@ interface DropZoneProps {
 
 export function DropzoneButton({ fileRef, handleUploadButtonClick }: DropZoneProps) {
     const theme = useMantineTheme();
-    console.log(fileRef)
 
     return (
         <div className={classes.wrapper}>
